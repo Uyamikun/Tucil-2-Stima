@@ -22,6 +22,8 @@ class graf:
         if simpul in self.dictgraf:
             del self.dictgraf[simpul]
     
+    def getSimpul(self):
+        return len(self.dictgraf.keys())
     #print Simpul
     def printSimpul(self):
        print(list(self.dictgraf.keys())) 
@@ -29,16 +31,20 @@ class graf:
     def getInDegree(self,simpul):
         return len(self.dictgraf[simpul])
 
-    def getAllZeroInDegree(self):
+    def countAllZeroInDegree(self):
         count = 0
         for simpul in self.dictgraf:
             if len(self.dictgraf[simpul]) == 0:
                 count +=1
         return count
+
+    #ambil semua simpul berderajat 0 masukan kedalam list
     def getZeroInDegree(self):
+        templist = []
         for simpul in self.dictgraf:
             if len(self.dictgraf[simpul]) == 0:
-                return simpul
+                templist.append(simpul)
+        return templist
 
     #2.edge sisi
     def addSisi(self, sisi,simpul):
@@ -68,24 +74,47 @@ class graf:
     def printSisi(self):
         print(list(self.dictgraf.values()))
 
+        #for simpul in self.dictgraf.keys()):
+        #      len(self.dictgraf.[i])
+        #     if max < len
+        
+
     # get Degree
+
+#ambil semua simpul yang nol degree innya
+#delSisi
+#delSimpul
+#masukin si simpul nol ke answer
+def TopSort(answer):
+    tempsimp = grf.getZeroInDegree()
+    arrsimpul = []
+    for i in tempsimp:
+        simpulzero = i
+        grf.delSisi(simpulzero)
+        grf.delSimpul(simpulzero)
+        arrsimpul.append(simpulzero)
+    if len(arrsimpul) != 0:
+        answer.append(arrsimpul)
 
 #MAIN DRIVER
 
 #read file
 p =[]
-#filename = input("filename (with extension): ")
-
+p2 = []
 #pokokna ini mah masukin text di file ke array  formatnya[['C1','C3'],['C2','C1','C4']]
-with open("case.txt") as f:
-    lines = [line.rstrip().rstrip(".").replace(", ","") for line in f]
+filename = input("enter filename (with extension): ")
+with open(filename) as f:
+    lines = [line.rstrip().replace(".",",").replace(" ","")for line in f]
 for item in lines:
-    out = [(item[i:i+2]) for i in range(0, len(item), 2)]   
-    p.append(out)
+    realitem = item.split(",")
+    for k in realitem:
+        if k != "":
+            p2.append(k)
+    p.append(p2)
+    p2 = []
 
 
 #sekarang inisiasi graf kosong
-
 grf = graf()
 
 #masukin semua simpul dan sisi ke graf
@@ -95,28 +124,29 @@ for array in range(len(p)):
     del p[array][0]
     for isiarray in range(len(p[array])):
         grf.addSisi(p[array][isiarray],tempsimpul)
-# grf.printSisi()
-# grf.printSimpul()
+
+
 
 #topologi sortnya disini
+
+#######
 answer = []
-loop = grf.getAllZeroInDegree()
-def TopSort(answer):
-    simpulzero = grf.getZeroInDegree()
-    grf.delSisi(simpulzero)
-    grf.delSimpul(simpulzero)
-    answer.append(simpulzero)
-for i in range(loop):
-    #ambil simpul yang degreenya 0
-
-
+for i in range(8):
+    TopSort(answer)
+#dapet jawabannya
+#cek masih ada isi array keys ga klo ada berarti error
+#
+if grf.getSimpul() == 0:
+    for x in range(len(answer)):
+        print("Semester", x+1,":",end=" ")
+        for i in range(len(answer[x])):
+            if i == len(answer[x])-1:
+                print(answer[x][i])
+            else:
+                print(answer[x][i],end=", ")
+else:
+    print("Tidak bisa menata mata kuliah")
+    print("Semester tidak cukup (>8 semester)")
+print("")
+input("-----Press any key to continue-----")
 # udah bisaaaaa tapi gatau ngeprintnya gmn wkwkwk   
-
-
-
-
-#answer.append(simpulzero)
-
-# for i in range(len(answer)):
-#     print("Semester", i+1,end=": ")
-#     print(answer[i])    
